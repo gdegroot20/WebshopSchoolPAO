@@ -29,10 +29,7 @@ init('ini_files');
 				<span>
 					<A>Zwart's Schoenen</A>
 				</span>
-				<nav id='topMenu'>
-						<a href="/">login</a>
-						<a href="/contact">Contact</a>
-				</nav>
+				
 			</header>
 			
 			<nav id='leftside'>
@@ -73,6 +70,9 @@ init('ini_files');
 			
 
 			<div id="content">
+				<?php //echo contactForm();?>
+				
+				<!--
 				<table id="item_list">
 					<TR>
 						<td class='item_image'  rowspan="2">
@@ -145,6 +145,7 @@ init('ini_files');
 						</td>
 					</TR>
 				</table>
+				-->
 			</div>
 
 			<footer>

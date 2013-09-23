@@ -82,9 +82,29 @@ header span a{
 }
 
 #content{
-	width:800px;
+	width:740px;
 	float:left;
 }
+
+#contact{
+	margin:10px;
+}
+
+#contact form textarea{
+	height:200px;
+	width:296px;
+	 resize: none;
+}
+
+#contact form input{
+	height:20px;
+	width:300px;
+}
+
+#contact form button{
+	float:right;
+}
+
 footer{
 	clear:both;
 }
