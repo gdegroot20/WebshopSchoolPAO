@@ -16,7 +16,7 @@ if(!empty($name) && !empty($email) && !empty($subject) && !empty($message)){
 		
 		$headers  = "From: $email\r\n"; 
 		$headers .= "Content-type: text/html\r\n"; 
-		$message='From: $name<BR>'.$message;
+		$message='From: $name<BR><BR>'.$message;
 		//mail($to, $subject, $message,$headers);
 
   		echo "mail Send";
