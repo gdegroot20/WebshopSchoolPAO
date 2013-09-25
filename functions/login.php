@@ -34,7 +34,7 @@ class Login {
 					<input type="text" title="E-mail" name="loginEmail" placeholder="E-mail">
 				</td>
 				<td>
-					<input type="text" title="Wachtwoord" name="loginPassword" placeholder="Wachtwoord">
+					<input type="password" title="Wachtwoord" name="loginPassword" placeholder="Wachtwoord">
 				</td>
 				<td>
 					<input type="submit" name="login" value="Login">
@@ -58,6 +58,23 @@ class Login {
 	}
 
 	private function login($email, $password) {
+
+		if (!isset($GLOBALS['DB']))
+			$GLOBALS['DB'] = dbConnect();
+
+		$db = $GLOBALS['DB'];
+
+		$query = $db -> prepare('SELECT * FROM `accounts` WHERE `Email` = ? AND `Password` = ?');
+		$param = array($email, md5($password));
+		$query -> execute($param);
+
+		$rows = $query -> fetch(PDO::FETCH_ASSOC);
+
+		if (!$rows) {
+			echo 'Query Failed!';
+		} else {
+			
+		}
 
 	}
 
