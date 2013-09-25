@@ -7,6 +7,13 @@ class Login {
 
 	public function getLogin() {
 		$output = '';
+
+		if (isset($_POST['login'])) {
+			$email = clean($_POST['loginEmail']);
+			$password = clean($_POST['loginPassword']);
+			$this -> login($email, $password);
+		}
+
 		if (isset($_SESSION['login'])) {
 			$login = $_SESSION['login'];
 			if ($login == 'loggedin')
@@ -24,10 +31,10 @@ class Login {
 		$output .= '
 		<form id="loginForm" action="index.php" method="post">
 				<td>
-					<input type="text" name="loginUsername" placeholder="Username">
+					<input type="text" title="E-mail" name="loginEmail" placeholder="E-mail">
 				</td>
 				<td>
-					<input type="text" name="loginPassword" placeholder="Password">
+					<input type="text" title="Wachtwoord" name="loginPassword" placeholder="Wachtwoord">
 				</td>
 				<td>
 					<input type="submit" name="login" value="Login">
@@ -40,10 +47,17 @@ class Login {
 	private function getLogoutForm() {
 		$output = '';
 
+		$output .= '
+		<form id="logoutForm" action="index.php" method="post">
+				<td>
+					<input type="submit" name="logout" value="Log uit">
+				</td>
+		</form>';
+
 		return $output;
 	}
 
-	private function login($username, $password) {
+	private function login($email, $password) {
 
 	}
 

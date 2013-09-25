@@ -17,7 +17,10 @@ class Header {
 					$output .= $login -> getLogin();
 					$output .= '
 						<td>
-						<a href="/contact">Contact</a>
+						<a href="index.php?content=register">Registreer</a>
+						</td>
+						<td>
+						<a href="index.php?content=contact">Contact</a>
 						</td>
 					</tr>
 				</table>

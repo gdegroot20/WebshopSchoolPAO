@@ -128,7 +128,6 @@ init('ini_files');
 				</table>
 			</div>
 
-
 			<div id="content">
 				<?php //echo contactForm(); ?>
 
