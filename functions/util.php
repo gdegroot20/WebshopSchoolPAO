@@ -6,4 +6,7 @@ function clean($var) {
 	return $var;
 }
 
+function appendTD($value) {
+	return '<td>' . $value . '</td>';
+}
 ?>

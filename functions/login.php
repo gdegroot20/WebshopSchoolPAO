@@ -6,30 +6,37 @@ class Login {
 	}
 
 	public function getLogin() {
-		$output = '';
+		$output = '<form id="loginForm" action="index.php" method="post">';
+
+		session_start();
+
+		if (isset($_POST['logoff'])) {
+			$this -> logout();
+		}
 
 		if (isset($_POST['login'])) {
 			$email = clean($_POST['loginEmail']);
 			$password = clean($_POST['loginPassword']);
-			$this -> login($email, $password);
+			$output .= $this -> login($email, $password);
 		}
 
-		if (isset($_SESSION['login'])) {
-			$login = $_SESSION['login'];
-			if ($login == 'loggedin')
-				$this -> getLogoutForm();
-			echo 'Logged in!';
-		} else {
-			$output .= $this -> getLoginForm();
+		if ((!isset($_SESSION['loggedin'])) || $_SESSION['loggedin'] == false) {
+			$output .= $this -> getLoginform();
+		} elseif ($_SESSION['loggedin'] === true) {
+			$account = $_SESSION['account'];
+			$output .= appendTD($account -> getName());
+			$_POST['account'] = '';
+			$_POST['pass'] = '';
+			$output .= $this -> getLogoutForm();
 		}
-		return $output;
+
+		return $output . '</form>';
 	}
 
 	private function getLoginForm() {
 		$output = '';
 
 		$output .= '
-		<form id="loginForm" action="index.php" method="post">
 				<td>
 					<input type="text" title="E-mail" name="loginEmail" placeholder="E-mail">
 				</td>
@@ -38,8 +45,7 @@ class Login {
 				</td>
 				<td>
 					<input type="submit" name="login" value="Login">
-				</td>
-		</form>';
+				</td>';
 
 		return $output;
 	}
@@ -48,16 +54,15 @@ class Login {
 		$output = '';
 
 		$output .= '
-		<form id="logoutForm" action="index.php" method="post">
 				<td>
-					<input type="submit" name="logout" value="Log uit">
-				</td>
-		</form>';
+					<input type="submit" name="logoff" value="Log uit">
+				</td>';
 
 		return $output;
 	}
 
 	private function login($email, $password) {
+		$output = '';
 
 		if (!isset($GLOBALS['DB']))
 			$GLOBALS['DB'] = dbConnect();
@@ -69,17 +74,28 @@ class Login {
 		$query -> execute($param);
 
 		$rows = $query -> fetch(PDO::FETCH_ASSOC);
+		$rowCount = $query -> rowCount();
 
-		if (!$rows) {
-			echo 'Query Failed!';
+		if ($rowCount == 1) {
+			$account = new Account($rows['id'], $rows['Email'], $rows['profile'], $rows['Serial'], $rows['Activated']);
+			$_SESSION['account'] = $account;
+			$_SESSION['loggedin'] = true;
+			$output .= appendTD('Succesvol ingelogd!');
 		} else {
-			
+			$output .= appendTD('Ongeldige login gegevens');
 		}
 
+		if (!$rows) {
+			$output .= appendTD('Inloggen mislukt!');
+		}
+		return $output;
 	}
 
 	private function logout() {
-
+		$output = '';
+		session_destroy();
+		$_SESSION = array();
+		return $output;
 	}
 
 }
