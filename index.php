@@ -43,41 +43,17 @@ init('ini_files');
 		<div>
 			<nav id='leftside'>
 				<ul id='leftMenu'>
-					<li>
-						<a href='#'>Categorie</a>
-						<ul>
-							<li>
-								<a href='#'>subCategorie</a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<a href='#'>Categorie</a>
-						<ul>
-							<li>
-								<a href='#'>subCategorie</a>
-							</li>
-							<li>
-								<a href='#'>subCategorie</a>
-							</li>
-							<li>
-								<a href='#'>subCategorie</a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<a href='#'>Categorie</a>
-					</li>
-					<li>
-						<a href='#'>Categorie</a>
-					</li>
-					<li>
-						<a href='#'>Categorie</a>
-					</li>
+					<?php
+					$nav= new navigate();
+					echo $nav-> getCat();
+					
+					?>
 				</ul>
 			</nav>
 
 			<div id="content">
+				<?php echo $nav-> getProducts();//echo contactForm(); ?>
+			<!--
 				<table id="item_list">
 					<TR>
 						<td class='item_image'  rowspan="2"><img src='' /></td>
@@ -126,60 +102,7 @@ init('ini_files');
 						</table></td>
 					</TR>
 				</table>
-			</div>
-
-			<div id="content">
-				<?php //echo contactForm(); ?>
-
-				<table id="item_list">
-					<TR>
-						<td class='item_image'  rowspan="2"><img src='' /></td>
-						<td class='item_name' colspan="2"><b>title</b></td>
-					</TR>
-					<TR>
-						<td class='item_description' colspan="2"> description negerin enzo </td>
-						<td>
-						<table class='item_price_table'>
-							<tr>
-								<td> Nu voor: </td>
-							</tr>
-							<tr>
-								<td> € 300, </td>
-								<td> 00 </td>
-							</tr>
-							<tr>
-								<td>
-								<button>
-									bestellen
-								</button></td>
-							</tr>
-						</table></td>
-					</TR>
-					<TR>
-						<td class='item_image'  rowspan="2"><img src='' /></td>
-						<td class='item_name' colspan="2"> title </td>
-					</TR>
-					<TR>
-						<td class='item_description' colspan="2"> description negerin enzo </td>
-						<td>
-						<table class='item_price_table'>
-							<tr>
-								<td> Nu voor: </td>
-							</tr>
-							<tr>
-								<td> € 300, </td>
-								<td> 00 </td>
-							</tr>
-							<tr>
-								<td>
-								<button>
-									bestellen
-								</button></td>
-							</tr>
-						</table></td>
-					</TR>
-				</table>
-
+-->
 			</div>
 			<footer>
 				<p>

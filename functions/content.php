@@ -16,6 +16,7 @@ class Content {
 		$output .= $login -> getLogin();
 		return $output;
 	}
+	
 
 }
 ?>
