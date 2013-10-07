@@ -7,7 +7,7 @@ class navigate{
 	}
 	
 	public function getCat(){
-		$content='<ul>';
+		$content='';
 		$stmt = $this->db->prepare("SELECT * FROM categorieën");
 		//$param=array($name,$email,$subject,$message);
 		$stmt->execute();

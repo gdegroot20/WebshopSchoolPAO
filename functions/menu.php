@@ -5,40 +5,12 @@ class Menu {
 		$output = '';
 		$output .= '
 		<nav id="leftside">
-				<ul id="leftMenu">
-					<li>
-						<a href="#">Categorie</a>
-						<ul>
-							<li>
-								<a href="#">subCategorie</a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<a href="#">Categorie</a>
-						<ul>
-							<li>
-								<a href="#">subCategorie</a>
-							</li>
-							<li>
-								<a href="#">subCategorie</a>
-							</li>
-							<li>
-								<a href="#">subCategorie</a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<a href="#">Categorie</a>
-					</li>
-					<li>
-						<a href="#">Categorie</a>
-					</li>
-					<li>
-						<a href="#">Categorie</a>
-					</li>
-				</ul>
-			</nav>
+			<ul id="leftMenu">';
+				$nav= new navigate();
+				$output .= $nav-> getCat();
+		$output .= '
+			</ul>
+		</nav>
 		';
 		return $output;
 	}
