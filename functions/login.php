@@ -84,7 +84,6 @@ class Login {
 		} else {
 			$output .= appendTD('Ongeldige login gegevens');
 		}
-
 		if (!$rows) {
 			$output .= appendTD('Inloggen mislukt!');
 		}

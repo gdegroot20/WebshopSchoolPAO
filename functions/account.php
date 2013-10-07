@@ -7,7 +7,7 @@ class Account {
 	private $serial;
 	private $activated;
 	private $address;
-
+	
 	public function __construct($id, $email, $profile, $serial, $activated) {
 		$this -> id = $id;
 		$this -> email = $email;

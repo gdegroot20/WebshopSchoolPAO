@@ -1,110 +1,109 @@
- *, #leftMenu:not{
-	margin:0px;
-	padding:0px;
+*, #leftMenu:not{
+margin:0px;
+padding:0px;
 }
 
-body{
-	width:1024px;
-	margin:auto;
+body {
+	width: 1024px;
+	margin: auto;
 }
 
-header{
-	width:1024px;
-	height:140px;
-	background-color:#AAAAAA;
+header {
+	width: 1024px;
+	height: 140px;
+	background-color: #AAAAAA;
 }
 
-header span{
-	width:2000px;
-	height:2000px;
-	margin-top:50px;
+header span {
+	width: 2000px;
+	height: 2000px;
+	margin-top: 50px;
 }
 
-header span a{
-	font-size:50px;
+header span a {
+	font-size: 50px;
 }
 
-#topMenu{
-	float:right;
-	
-	margin:40px;
-	margin-top:50px;
+#topMenu {
+	float: right;
+	margin: 40px;
+	margin-top: 50px;
 }
-#topMenu a{
-	margin-left:10px;
-	text-decoration:none;
-	color:#000000;
-}
-
-#leftside{
-	padding-top:16px;
-	width:200px;
-	height:800px;
-	background-color:#AAAAAA;
-	float:left;
+#topMenu a {
+	margin-left: 10px;
+	text-decoration: none;
+	color: #000000;
 }
 
-#leftMenu,#leftMenu li{
-	list-style:none;
-	
-}
-#leftMenu{
-	margin-top:20px;
-}
-
-
-
-#leftMenu a{
-	text-decoration:none;
-	color:#000000;
+#leftside {
+	padding-top: 16px;
+	width: 200px;
+	height: 800px;
+	background-color: #AAAAAA;
+	float: left;
 }
 
-#item_list{
-	width:800px;
+#leftMenu, #leftMenu li {
+	list-style: none;
+}
+#leftMenu {
+	margin-top: 20px;
 }
 
-#item_list:nth-child(2){
-	border:1px solid black;
+#leftMenu a {
+	text-decoration: none;
+	color: #000000;
 }
 
-.item_image,.item_image img{
-	width:200px;
-	height:200px;
+#item_list {
+	width: 800px;
 }
 
-
-.item_price_table{
-	width:50px;
+#item_list:nth-child(2) {
+	border: 1px solid black;
 }
 
-.item_description{
-	width:500px;
+.item_image, .item_image img {
+	width: 200px;
+	height: 200px;
 }
 
-#content{
-	width:740px;
-	float:left;
+.item_price_table {
+	width: 50px;
 }
 
-#contact{
-	margin:10px;
+.item_description {
+	width: 500px;
 }
 
-#contact form textarea{
-	height:200px;
-	width:296px;
-	 resize: none;
+#content {
+	width: 740px;
+	float: left;
 }
 
-#contact form input{
-	height:20px;
-	width:300px;
+#contact {
+	margin: 10px;
 }
 
-#contact form button{
-	float:right;
+#contact form textarea {
+	height: 200px;
+	width: 296px;
+	resize: none;
 }
 
-footer{
-	clear:both;
+#contact form input {
+	height: 20px;
+	width: 300px;
+}
+
+#contact form button {
+	float: right;
+}
+
+footer {
+	clear: both;
+}
+
+table tr.separator {
+	height: 15px;
 }
