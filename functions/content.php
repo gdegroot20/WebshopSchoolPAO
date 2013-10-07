@@ -14,6 +14,7 @@ class Content {
 		$output .= $this -> fillContent();
 		return $output;
 	}
+	
 
 	public function fillContent() {
 		$output = '<div id="content">';
