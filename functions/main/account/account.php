@@ -87,10 +87,29 @@ class Account {
 
 		return $output;
 	}
+	
+	public function changeAddress($firstName, $midName, $surName, $streetName, $homeNumber, $zipCode, $city){
+		$output="";
+		if(!empty($firstName) && !empty($midName) && !empty($surName) && !empty($streetName) && !empty($homeNumber) && !empty($zipCode) && !empty($city)){
+			$patterns=array("/[^\d\/:*?\"<>\|]$/","/^\d+$/","/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/");	
 
+			if(preg_match($patterns[0],$firstName) && preg_match($patterns[0],$midName) && preg_match($patterns[0],$surName)
+			&& preg_match($patterns[0],$streetName) && preg_match($patterns[1],$homeNumber) && preg_match($patterns[2],$zipCode) && preg_match($patterns[0],$city) ){
+					
+				$this->setAddress(clean($firstName), clean($midName), clean($surName), clean($streetName), clean($homeNumber), clean($zipCode), clean($city));
+				$output.="Gegevens succesvol aangepast";
+			}else{
+				$output.="Bepaalde velden zijn niet juist ingevuld";
+			}
+		}else{
+			$output.="Velden mogen niet leeg zijn";
+		}
+		return $output;
+	}
+	
 	private function setAddress($firstName, $midName, $surName, $streetName, $homeNumber, $zipCode, $city) {
 		$db = $GLOBALS['DB'];
-		$query = $db -> prepare('UPDATE adressen SET Voornaam = ? Tussenvoegsel = ? Achternaam = ? Postcode = ? Straatnaam = ? Huisnummer = ? Plaats = ? WHERE `accountid` = ?');
+		$query = $db -> prepare('UPDATE adressen SET Voornaam = ? ,Tussenvoegsel = ? ,Achternaam = ?, Postcode = ? ,Straatnaam = ? ,Huisnummer = ? ,Plaats = ? WHERE `accountid` = ?');
 		$param = array($firstName, $midName, $surName, $zipCode, $streetName, $homeNumber, $city, $this -> id);
 		$query -> execute($param);
 
@@ -159,16 +178,44 @@ class Account {
 	}
 
 	public function showOrders() {
-		$output = " ";
+		$output = "";
 		$orders = $this -> getOrders();
 		foreach ($orders as $order) {
+			$output.="	<table id='tableviewOrders'>
+							<TR>
+								<TD>BestelNummer : ".$order['id']." | Datum besteld : ".$order['BestelDag']."
+							</TR>
+							<table id='innerTableViewOrders'>
+								<TR>
+									<TD>Product</TD>
+									<TD>Hoeveelheid</td>
+									<TD>prijs</td>
+									<td>totaal Prijs</td>
+								</TR>";
+			
 			$items = explode(";", $order['Producten']);
+			$totaalprijs=0;
 			foreach ($items as $item) {
 				$item = explode(",", $item);
 				$amount = $item[1];
 				$item = $this -> getItem($item[0]);
-				$output .= $item["Naam"] . "<BR>" . $item["Prijs"] . "<BR>";
+				$prijs=$item["Prijs"] * $amount;
+				$totaalprijs+=$prijs;
+				$output.="	<TR>
+								<TD><img src='#'/><a href='#'> ".$item["Naam"]."</a></TD>
+								<TD>".$amount."</TD>
+								<TD>€ ".$item["Prijs"]."</TD>
+								<TD>€ ".$prijs."</TD>
+							</TR>";
 			}
+			$output.='		<TR>
+								<TD></TD>
+								<TD></TD>
+								<TD><b>Totaal</b></TD>
+								<TD>€ '.$totaalprijs.'</TD>
+							</TR>
+						</table>
+					</table>';
 		}
 
 		return $output;

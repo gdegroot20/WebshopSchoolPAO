@@ -24,10 +24,11 @@ class Content {
 				$output .= $register -> getForm();
 			} else if ($_GET['content'] == 'nav') {
 				$nav = new navigate();
-				$output .= $nav -> getProducts();
-			} else if ($_GET['content'] == 'nav') {
-				$nav = new navigate();
-				$output .= $nav -> getProducts();
+				if(isset($_GET['subCat'])){
+					$output .= $nav -> getProducts();
+				}
+			}else if ($_GET['content'] == 'contact') {
+				$output.= contactForm();
 			} else if ($_GET['content'] == 'manage') {
 				header('Location: admin');
 				exit();
@@ -40,7 +41,7 @@ class Content {
 					if ($_GET["page"] == "adjustInfo") {
 						//($_POST);
 						if (isset($_POST['adjustAddressInfo'])) {
-
+								$output .= $acc -> changeAddress($_POST["firstName"],$_POST["middleName"],$_POST["surName"],$_POST["streetName"],$_POST["homeNumber"],$_POST["zipCode"],$_POST["city"]);
 						} else if (isset($_POST['adjustPassword'])) {
 							if (!empty($_POST["passOld"]) && !empty($_POST["passNew"]) && !empty($_POST["passNewCheck"]))
 								$output .= $acc -> changePassword($_POST["passOld"], $_POST["passNew"], $_POST["passNewCheck"]);
