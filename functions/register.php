@@ -4,7 +4,7 @@ class Register {
 	public function __construct() {
 	}
 
-	public function getForm() {
+	public function load() {
 		$output = '';
 
 		$output .= '

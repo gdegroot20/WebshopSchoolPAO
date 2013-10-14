@@ -2,34 +2,38 @@
 
 class Login {
 
+	private $log = '';
+
 	public function __construct() {
-	}
-
-	public function getLogin() {
-		$output = '<form id="loginForm" action="index.php" method="post">';
-
-		session_start();
-
 		if (isset($_POST['logoff'])) {
 			$this -> logout();
-		}
-
-		if (isset($_POST['login'])) {
+		} else if (isset($_POST['login'])) {
 			$email = clean($_POST['loginEmail']);
 			$password = clean($_POST['loginPassword']);
-			$output .= $this -> login($email, $password);
+			$this -> log .= $this -> login($email, $password);
 		}
+	}
+
+	public function getLogin($forceHome) {
+		$output = '<form id="loginForm" '.$forceHome ? 'action="../index.php"' : '' .' method="post">';
+
+		$output .= $this -> log;
 
 		if ((!isset($_SESSION['loggedin'])) || $_SESSION['loggedin'] == false) {
 			$output .= $this -> getLoginform();
-		} elseif ($_SESSION['loggedin'] === true) {
+		} else if ($_SESSION['loggedin'] === true) {
 			$account = $_SESSION['account'];
-			$output .= appendTD($account -> getName());
-			$_POST['account'] = '';
-			$_POST['pass'] = '';
-			$output .= $this -> getLogoutForm();
+			if ($account -> shouldLogout()) {
+				$this -> logout();
+				$output .= $this -> getLoginForm();
+			} else {
+				$output .= appendTD($account -> getName());
+				$_POST['account'] = '';
+				$_POST['pass'] = '';
+				$output .= $this -> getLogoutForm();
+				$account -> update();
+			}
 		}
-
 		return $output . '</form>';
 	}
 
@@ -78,6 +82,7 @@ class Login {
 
 		if ($rowCount == 1) {
 			$account = new Account($rows['id'], $rows['Email'], $rows['profile'], $rows['Serial'], $rows['Activated']);
+			$account -> update();
 			$_SESSION['account'] = $account;
 			$_SESSION['loggedin'] = true;
 			$output .= appendTD('Succesvol ingelogd!');
@@ -93,7 +98,8 @@ class Login {
 	private function logout() {
 		$output = '';
 		session_destroy();
-		$_SESSION = array();
+		session_unset();
+		session_start();
 		return $output;
 	}
 

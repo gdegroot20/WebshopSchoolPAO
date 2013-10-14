@@ -5,8 +5,7 @@ class Header {
 	public function __construct() {
 	}
 
-	public function getHeader() {
-		$login = new Login();
+	public function getHeader($login) {
 		$output = '';
 		$output .= '
 		<header>
@@ -14,11 +13,22 @@ class Header {
 			<nav id="topMenu">
 				<table>
 					<tr>';
-					$output .= $login -> getLogin();
-					$output .= '
+					$output .= $login -> getLogin(false);
+					if (!isset($_SESSION['loggedin'])) {
+						$output .= '
 						<td>
 						<a href="index.php?content=register">Registreer</a>
-						</td>
+						</td>';
+					} else {
+						$account = $_SESSION['account'];
+						if ($account -> hasRight('cms')) {
+							$output .= '
+							<td>
+							<a href="index.php?content=manage">Beheer</a>
+							</td>';
+						}
+					}
+					$output .= '
 						<td>
 						<a href="index.php?content=contact">Contact</a>
 						</td>

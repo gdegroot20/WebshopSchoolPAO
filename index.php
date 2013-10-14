@@ -1,7 +1,11 @@
 <?php
-include 'functions/bootstrap.php';
+include 'functions/main/bootstrap.php';
 bootstrap('functions');
 init('ini_files');
+
+session_start();
+
+$login = new Login();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,10 +30,11 @@ init('ini_files');
 	<body>
 		<?php
 		$header = new Header();
-		echo $header -> getHeader();
+		echo $header -> getHeader($login);
 
 		$content = new Content();
 		echo $content -> loadContent();
+		echo isset($_SESSION) ? 'TRUE' : 'FALSE';
 		?>
 
 		<footer>
