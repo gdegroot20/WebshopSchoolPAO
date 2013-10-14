@@ -75,21 +75,15 @@ class navigate{
 		
 	}
 	
+	
+	public function customerMenu(){
+		$output= "	
+						<li><a href='".$_SERVER["PHP_SELF"]."?content=customerPage&page=adjustInfo'>Gegevens wijzigen</a></li>
+						<li><a href='".$_SERVER["PHP_SELF"]."?content=customerPage&page=viewOrders'>Overzicht bestellingen</a></li>
+				";
+		return $output;
+	}
+	
 
 }
-
-
-/*
-$db = new PDO('mysql:host=localhost;dbname=webshop;charset=utf8', 'root', '');
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-$stmt = $db->prepare("INSERT INTO `emails` (`from`, `email`, `subject`, `message`) VALUES (?,?,?,?)");
-
-$param=array($name,$email,$subject,$message);
-
-$stmt->execute($param);
-
-//$f=$stmt->fetch();
-*/
-
 ?>

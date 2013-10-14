@@ -25,6 +25,34 @@ class Content {
 			} else if ($_GET['content'] == 'nav') {
 				$nav = new navigate();
 				$output .= $nav -> getProducts();
+			} else if ($_GET['content'] == 'nav') {
+				$nav = new navigate();
+				$output .= $nav -> getProducts();
+			}else if ($_GET['content'] == 'customerPage') {
+				if(isset($_GET["page"])){
+					$acc = $_SESSION['account'];
+					if($_GET["page"] == "viewOrders"){
+						$output.=$acc->showOrders();
+					}
+					if($_GET["page"] == "adjustInfo"){
+						//($_POST);
+						if(isset($_POST['adjustAddressInfo'])){
+							
+						}
+						else if(isset($_POST['adjustPassword'])){
+							if(!empty($_POST["passOld"]) && !empty($_POST["passNew"]) && !empty($_POST["passNewCheck"]))
+								$output.= $acc->changePassword($_POST["passOld"],$_POST["passNew"],$_POST["passNewCheck"]);
+						}
+						
+						$output.= $acc->changeAddressForm();
+						$output.= $acc->changePasswordForm();
+						
+					}else if($_GET["page"] == "viewOrders"){
+						
+					}
+				}else{
+					$output.= "Welkom hier kunt u account dingen doen";
+				}
 			}
 		} else {
 			$output .= '

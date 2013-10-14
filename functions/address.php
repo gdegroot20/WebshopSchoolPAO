@@ -14,7 +14,6 @@ class Address {
 		$this -> huisnummer = $huisnummer;
 		$this -> plaats = $plaats;
 	}
-
 	public function getVoornaam() {
 		return $this -> voornaam;
 	}
@@ -25,6 +24,48 @@ class Address {
 
 	public function getAchternaam() {
 		return $this -> achternaam;
+	}
+	public function getPostcode() {
+		return $this -> postcode;
+	}
+
+	public function getStraatnaam() {
+		return $this -> straatnaam;
+	}
+
+	public function getHuisnummer() {
+		return $this -> huisnummer;
+	}
+	
+	public function getPlaats() {
+		return $this -> plaats;
+	}
+	
+	public function setVoornaam($voornaam) {
+		$this -> voornaam = $voornaam;
+	}
+
+	public function setTussenvoegsel($tussenvoegsel) {
+		$this -> tussenvoegsel = $tussenvoegsel;
+	}
+
+	public function setAchternaam($achternaam) {
+		$this -> achternaam = $achternaam;
+	}
+	public function setPostcode($postcode) {
+		$this -> postcode = $postcode;
+	}
+
+	public function setStraatnaam($straatnaam) {
+		$this -> straatnaam = $straatnaam;
+	}
+
+	public function setHuisnummer($huisnummer) {
+		$this -> huisnummer = $huisnummer;
+	}
+	
+	public function setPlaats($plaats) {
+		$this -> plaats = $plaats;
 	}
 
 }
