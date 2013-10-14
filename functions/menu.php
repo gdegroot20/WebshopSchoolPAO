@@ -1,7 +1,7 @@
 <?php
 class Menu {
 
-	public function getMenu() {
+	public function load() {
 		$output = '';
 		$output .= '
 		<nav id="leftside">

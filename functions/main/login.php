@@ -15,7 +15,7 @@ class Login {
 	}
 
 	public function getLogin($forceHome) {
-		$output = '<form id="loginForm" '.$forceHome ? 'action="../index.php"' : '' .' method="post">';
+		$output = '<form id="loginForm" ' . ($forceHome ? 'action="../index.php"' : '') . ' method="post">';
 
 		$output .= $this -> log;
 
