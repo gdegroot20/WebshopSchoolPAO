@@ -108,3 +108,37 @@ footer {
 table tr.separator {
 	height: 15px;
 }
+
+
+#tableviewOrders{
+	margin:20px;
+}
+
+#innerTableViewOrders{
+	border-collapse:collapse;
+}
+
+#innerTableViewOrders tr:first-child{
+	height:40px;
+	border-radius:10px;
+}
+
+#innerTableViewOrders tr{
+	border:2px solid black;
+}
+
+#innerTableViewOrders td{
+	border-left:2px solid black; 
+	text-align:center;
+	min-width:100px;
+}
+
+#innerTableViewOrders a{
+	width:130px;
+}
+#innerTableViewOrders img{
+	height:80px;width:60px;
+}
+#innerTableViewOrders a,#innerTableViewOrders img{
+	float:left;
+}
