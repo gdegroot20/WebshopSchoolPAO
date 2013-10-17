@@ -4,11 +4,11 @@ require_once ('../functions/main/bootstrap.php');
 bootstrap('../functions/main');
 bootstrap('functions');
 init('../ini_files');
+dbConnect();
 
 session_start();
 
 $login = new Login();
-
 
 if (isset($_SESSION['loggedin'])) {
 	$account = $_SESSION['account'];
@@ -20,6 +20,7 @@ if (isset($_SESSION['loggedin'])) {
 <html>
 	<head>
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<script type="text/javascript" src="scripts/main.js"></script>
 	</head>
 
 	<body class="main">
@@ -28,20 +29,9 @@ if (isset($_SESSION['loggedin'])) {
 				<?php
 				$header = new AdminHeader();
 				echo $header -> getHeader($login);
+				$cms = new CMS();
+				echo $cms -> load();
 				?>
-				<nav>
-					<ul>
-						<li>
-							Producten
-						</li>
-						<li>
-							Categorie&euml;n
-						</li>
-						<li>
-							Klanten
-						</li>
-					</ul>
-				</nav>
 			</div>
 		</div>
 	</body>

@@ -47,7 +47,6 @@ class Account {
 	}
 	
 	public function shouldLogout() {
-		echo $this -> getDelta();
 		return $this -> getDelta() > 450;
 	}
 	

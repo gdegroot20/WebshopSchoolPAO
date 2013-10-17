@@ -21,7 +21,7 @@ class Content {
 		if (isset($_GET['content'])) {
 			if ($_GET['content'] == 'register') {
 				$register = new Register();
-				$output .= $register -> getForm();
+				$output .= $register -> load();
 			} else if ($_GET['content'] == 'nav') {
 				$nav = new navigate();
 				$output .= $nav -> getProducts();

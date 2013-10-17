@@ -10,7 +10,7 @@ a:active {
 	text-decoration: none
 }
 a:hover {
-	text-decoration: underline;
+	text-decoration: none;
 }
 
 body {
@@ -27,8 +27,7 @@ header {
 #topMenu {
 }
 
-table td {
-
+table {
 }
 
 #page {
@@ -39,3 +38,18 @@ table td {
 	border: solid black 1px;
 	border-radius: 3px;
 }
+
+#categoryTable {
+	margin-left: auto;
+	margin-right: auto;
+	width: 10em;
+}
+
+#category {
+	text-align: center;
+}
+
+.edit, .delete {
+	width: 22%;
+}
+
