@@ -9,6 +9,7 @@ dbConnect();
 session_start();
 
 $login = new Login();
+$cms = new CMS();
 
 if (isset($_SESSION['loggedin'])) {
 	$account = $_SESSION['account'];
@@ -29,7 +30,6 @@ if (isset($_SESSION['loggedin'])) {
 				<?php
 				$header = new AdminHeader();
 				echo $header -> getHeader($login);
-				$cms = new CMS();
 				echo $cms -> load();
 				?>
 			</div>

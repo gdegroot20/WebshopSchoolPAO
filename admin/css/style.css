@@ -24,12 +24,6 @@ header {
 	text-align: center;
 }
 
-#topMenu {
-}
-
-table {
-}
-
 #page {
 	width: 90%;
 	margin-left: 5%;
@@ -42,7 +36,7 @@ table {
 #categoryTable {
 	margin-left: auto;
 	margin-right: auto;
-	width: 10em;
+	width: 15em;
 }
 
 #category {

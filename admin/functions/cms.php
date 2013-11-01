@@ -3,6 +3,10 @@
 class CMS {
 
 	function __construct() {
+		$account = $_SESSION['account'];
+		if (!$account -> hasRight('cms')) {
+			header('Location: ../');
+		}
 	}
 
 	public function load() {
@@ -77,9 +81,17 @@ class CMS {
 
 		$result = $queryCat -> fetch(PDO::FETCH_ASSOC);
 		$output .= '<div id="category">';
-		$output .= '<h2>' . $result['Naam'] . '</h2>';
 
 		$output .= '<table id="categoryTable">';
+		$output .= '<tr>
+						<td>
+							<h2>' . $result['Naam'] . '</h2>
+						</td>
+						<td>
+							<a href="index.php?content=cat&action=edit&cat=' . $result['id'] . '"><img class="edit" src="images/edit.png"</a>							
+							<a href="index.php?content=cat&action=delete&cat=' . $result['id'] . '" onclick="return checkDelete(' . '\'' . $result['Naam'] . '\'' . ')"><img class="delete" src="images/delete.png" /></a>
+						</td>
+					</tr>';
 		while ($result = $querySub -> fetch(PDO::FETCH_ASSOC)) {
 			$output .= '<tr>';
 			foreach ($result as $key => $value) {
@@ -103,8 +115,26 @@ class CMS {
 		$output = '';
 		if (isset($_GET['cat'])) {
 			$id = clean($_GET['cat']);
+			$output .= '<form method="post"><table>';
+			$db = $GLOBALS['DB'];
+			$query = $db -> prepare('SELECT * FROM `categorieën` WHERE `id` = ?');
+			$query -> execute(array(clean($id)));
+			
+			while ($row = $query -> fetch(PDO::FETCH_ASSOC)) {
+				$output .= '<input type="text" value="'.$row['Naam'].'"';
+			}
+			
+			$output .= '</form></table>';
 		} else if (isset($_GET['subcat'])) {
 			$id = clean($_GET['subcat']);
+			$output .= '<form method="post"><table>';
+			$db = $GLOBALS['DB'];
+			$query = $db -> prepare('SELECT * FROM `categorieën` WHERE `id` = ?');
+			$query -> execute(array(clean($id)));
+			
+			while ($row = $query -> fetch(PDO::FETCH_ASSOC)) {
+				$output .= '<input type="text" value="'.$row['Naam'].'"';
+			}
 		}
 		return $output;
 	}
