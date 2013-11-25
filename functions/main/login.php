@@ -25,7 +25,7 @@ class Login {
 			$account = $_SESSION['account'];
 			if ($account -> shouldLogout()) {
 				$this -> logout();
-				$output .= $this -> getLoginForm();
+				header('Location: /index.php');
 			} else {
 				$output .= appendTD($account -> getName());
 				$_POST['account'] = '';
@@ -95,7 +95,7 @@ class Login {
 		return $output;
 	}
 
-	private function logout() {
+	public function logout() {
 		$output = '';
 		session_destroy();
 		session_unset();

@@ -19,10 +19,10 @@ class CMS {
 				if (isset($_GET['action'])) {
 					if ($_GET['action'] == 'view') {
 						if (isset($_GET['cat'])) {
-							$output .= $this -> view($_GET['cat']);
+							$output .= $this -> viewCategory($_GET['cat'], TRUE);
 						}
 					} else if ($_GET['action'] == 'edit') {
-						$output .= $this -> edit();
+						$output .= $this -> editCategory();
 					} else if ($_GET['action'] == 'delete') {
 						$output .= $this -> delete();
 					}
@@ -32,19 +32,59 @@ class CMS {
 						<h2>Categorie&euml;n</h2>';
 					$output .= $this -> loadCategories();
 				}
+			} else if ($_GET['content'] == 'item') {
+				if (isset($_GET['action'])) {
+					if (isset($_GET['action'])) {
+						switch ($_GET['action']) {
+							case 'view' :
+								if (isset($_GET['cat']))
+									$output .= $this -> viewCategory($_GET['cat'], FALSE, 'list');
+								break;
+							case 'list' :
+								if (isset($_GET['subcat']))
+									$output .= $this -> listItems($_GET['subcat']);
+								break;
+							case 'edit' :
+								if (isset($_GET['item']))
+									$output .= $this -> editItem();
+								break;
+							case 'add' :
+								if (isset($_GET['subcat']))
+									$output .= $this -> addItem();
+								break;
+							case 'delete' :
+								if (isset($_GET['item']))
+									$output .= $this -> deleteItem();
+								break;
+						}
+					}
+				} else {
+					$output .= $this -> loadItems();
+				}
+			} else if ($_GET['content'] == 'order') {
+				if (isset($_GET['action'])) {
+					switch ($_GET['action']) {
+						case 'list':
+							$output .= $this -> listOrders();
+							break;
+					}
+				}
 			}
 		} else {
 			$output .= '
 			<nav>
 				<ul>
 					<li>
-						Producten
+						<a href="index.php?content=item">Producten</a>
 					</li>
 					<li>
-						<a href="index.php?content=cat">Categorie&euml;n</a>
+						<a href="index.php?content=cat">Categorieën</a>
 					</li>
 					<li>
-						Klanten
+						<a href="index.php?content=order">Bestellingen</a>
+					</li>
+					<li>
+						<a>Klanten</a>
 					</li>
 				</ul>
 			</nav>
@@ -84,7 +124,29 @@ class CMS {
 		return $output;
 	}
 
-	private function view($id) {
+	private function loadItems() {
+		$output = '';
+		$db = $GLOBALS['DB'];
+		$query = $db -> prepare('SELECT * FROM `categorieën` ORDER BY `Naam` ASC');
+		$query -> execute();
+		$output .= '<table id="categoryTable">';
+		$output .= '<h2>Items - Categorieën</h2>';
+		while ($result = $query -> fetch(PDO::FETCH_ASSOC)) {
+			$output .= '<tr>';
+			foreach ($result as $key => $value) {
+				if ($key == 'Naam') {
+					$output .= '<td>';
+					$output .= '<a href="index.php?content=item&action=view&cat=' . $result['id'] . '">' . $value . '</a>';
+					$output .= '</td>';
+				}
+			}
+			$output .= '</tr>';
+		}
+		$output .= '</table>';
+		return $output;
+	}
+
+	private function viewCategory($id, $edit, $action = false) {
 		$output = '';
 		$db = $GLOBALS['DB'];
 		$queryCat = $db -> prepare('SELECT * FROM `categorieën` WHERE id = ?');
@@ -99,27 +161,34 @@ class CMS {
 		$output .= '<tr>
 						<td>
 							<h2>' . $result['Naam'] . '</h2>
-						</td>
-						<td>
-							<a href="index.php?content=cat&action=edit&cat=' . $result['id'] . '"><img class="edit" src="images/edit.png" /></a>							
-							<a href="index.php?content=cat&action=delete&cat=' . $result['id'] . '" onclick="return checkDelete(' . '\'' . $result['Naam'] . '\'' . ')"><img class="delete" src="images/delete.png" /></a>
-						</td>
-					</tr>';
-		$output .= '<form method="post">
-						<tr>
-							<td><input type="text" placeholder="Categorie toevoegen" name="name"></td>
-							<td><input id="addButton" type="submit" name="add" value=""></td>
-						</tr>
-					</form>';
+						</td>';
+		if ($edit) {
+			$output .= '
+							<td>
+								<a href="index.php?content=cat&action=edit&cat=' . $result['id'] . '"><img class="edit" src="images/edit.png" /></a>							
+								<a href="index.php?content=cat&action=delete&cat=' . $result['id'] . '" onclick="return checkDelete(' . '\'' . $result['Naam'] . '\'' . ')"><img class="delete" src="images/delete.png" /></a>
+							</td>';
+		}
+		$output .= '</tr>';
+		if ($edit) {
+			$output .= '<form method="post">
+							<tr>
+								<td><input type="text" placeholder="Categorie toevoegen" name="name"></td>
+								<td><input id="addButton" type="submit" name="add" value=""></td>
+							</tr>
+						</form>';
+		}
 		while ($result = $querySub -> fetch(PDO::FETCH_ASSOC)) {
 			$output .= '<tr>';
 			foreach ($result as $key => $value) {
 				if ($key == 'Naam') {
-					$output .= '<td><a>' . $value . '</a></td>';
-					$output .= '<td>';
-					$output .= '<a href="index.php?content=cat&action=edit&subcat=' . $result['id'] . '"><img class="edit" src="images/edit.png"></a>';
-					$output .= '<a href="index.php?content=cat&action=delete&subcat=' . $result['id'] . '" onclick="return checkDelete(' . '\'' . $value . '\'' . ')"><img class="delete" src="images/delete.png" /></a>';
-					$output .= '</td>';
+					$output .= '<td><a ' . ($action === false ? '' : 'href="index.php?content=item&action=list&subcat=' . $result['id'] . '"') . '>' . $value . '</a></td>';
+					if ($edit) {
+						$output .= '<td>';
+						$output .= '<a href="index.php?content=cat&action=edit&subcat=' . $result['id'] . '"><img class="edit" src="images/edit.png"></a>';
+						$output .= '<a href="index.php?content=cat&action=delete&subcat=' . $result['id'] . '" onclick="return checkDelete(' . '\'' . $value . '\'' . ')"><img class="delete" src="images/delete.png" /></a>';
+						$output .= '</td>';
+					}
 				}
 			}
 			$output .= '</tr>';
@@ -130,7 +199,110 @@ class CMS {
 		return $output;
 	}
 
-	private function edit() {
+	private function listItems($id) {
+		$output = '';
+		$output .= '<center><a href="index.php?content=item&action=add&subcat=' . $_GET['subcat'] . '" ><h2>Product Toevoegen</h2></a></center><hr>';
+		$db = $GLOBALS['DB'];
+		$query = $db -> prepare('SELECT * FROM `producten` WHERE `parentid` = ?');
+		$query -> execute(array($id));
+		$itemHeader = '<center><h2>Producten:</h2></center>';
+		$i = 0;
+		$itemList = '';
+		while ($row = $query -> fetch(PDO::FETCH_ASSOC)) {
+			$itemList .= '<div class="product"><table id="itemTable">';
+			$itemList .= '<tr>
+							<td>&nbsp;</td>
+							<td><a class="title">' . $row['Naam'] . '</a><hr noshade></td></tr>';
+			$itemList .= '<tr>
+							<td><a href="index.php?content=item&action=edit&item=' . $row['id'] . '"><img class="edit2" src="images/edit.png"></a></td>
+							<td><a><strong>Omschrijving:</strong> ' . $row['Omschrijving'] . '</a></td>
+						</tr>';
+			$itemList .= '<tr>
+							<td><a href="index.php?content=item&action=delete&item=' . $row['id'] . '&parent=' . $id . '" onclick="return checkDelete(\'' . $row['Naam'] . '\')"><img class="delete2" src="images/delete.png"></a></td>
+							<td><a><strong>Prijs:</strong> €' . $row['Prijs'] . '</a></td></tr>';
+			$itemList .= '<tr>
+							<td>&nbsp;</td>
+							<td><a><strong>Voorraad:</strong> ' . $row['Voorraad'] . '</a></td>
+						</tr>';
+			$itemList .= '</table></div>';
+			$i++;
+		}
+		if ($i == 0) {
+			$itemHeader = '<center><h2>Geen producten gevonden</h2></center>';
+		}
+		
+		$output .= $itemHeader;
+		$output .= $itemList;
+		
+		return $output;
+	}
+
+	private function listItems() {
+		$output = '';
+		$db = $GLOBALS['DB'];
+		$query = $db -> prepare('SELECT * FROM `bestellingen`');
+		return $output;
+	}
+
+	private function editItem() {
+		$output = '';
+		if (isset($_POST['itemEdit'])) {
+			$id = $_POST['itemID'];
+			$name = clean($_POST['itemName']);
+			$description = clean($_POST['itemDescription']);
+			$price = clean($_POST['itemPrice']);
+			$amount = clean($_POST['itemAmount']);
+			if (!is_numeric($id)) {
+				$output .= 'Er ging iets fout in uw bewerking.';
+				return $output;
+			}
+			$db = $GLOBALS['DB'];
+			$query = $db -> prepare('UPDATE `producten` 
+									SET `Naam` = ?, `Omschrijving` = ?, `Prijs` = ?, `Voorraad` = ? 
+									WHERE `id` = ?');
+			$params = array($name, $description, $price, $amount, $id);
+			$query -> execute($params);
+			header('Location: index.php?content=item&action=list&subcat=' . $_POST['itemParent']);
+			exit();
+		} else {
+			$db = $GLOBALS['DB'];
+			$query = $db -> prepare('SELECT * FROM `producten` WHERE `id` = ?');
+			$query -> execute(array($_GET['item']));
+			$row = $query -> fetch(PDO::FETCH_ASSOC);
+			$name = $row['Naam'];
+			$description = $row['Omschrijving'];
+			$price = $row['Prijs'];
+			$amount = $row['Voorraad'];
+			$output .= '<form method="post"><table>
+							<input type="hidden" name="itemID" value="' . $_GET['item'] . '" >
+							<input type="hidden" name="itemParent" value="' . $row['parentid'] . '" >
+							<tr>
+								<td>Naam:</td>
+								<td><input type="text" name="itemName" value="' . $name . '" ></td>
+							</tr>
+							<tr>
+								<td>Omschrijving:</td>
+								<td><input type="text" name="itemDescription" value="' . $description . '" ></td>
+							</tr>
+							<tr>
+								<td>Prijs:</td>
+								<td><input type="text" name="itemPrice" value="' . $price . '" ></td>
+							</tr>
+							<tr>
+								<td>Voorraad:</td>
+								<td><input type="text" name="itemAmount" value="' . $amount . '" ></td>
+							</tr>
+							<tr>
+								<td>
+								<input type="submit" name="itemEdit" value="Wijzigen" >
+								</td>
+							</tr>';
+			$output .= '</table></form>';
+		}
+		return $output;
+	}
+
+	private function editCategory() {
 		$output = '';
 		if (isset($_POST['update'])) {
 			$table = (isset($_GET['cat']) ? 'categorieën' : 'subcategorieën');
@@ -159,7 +331,7 @@ class CMS {
 			$query -> execute(array(clean($id)));
 
 			while ($row = $query -> fetch(PDO::FETCH_ASSOC)) {
-				$output .= $this -> editForm($row, $type);
+				$output .= $this -> editCategoryForm($row, $type);
 			}
 			$output .= '</table></form>';
 
@@ -167,7 +339,7 @@ class CMS {
 		return $output;
 	}
 
-	private function editForm($row, $type) {
+	private function editCategoryForm($row, $type) {
 		$output = '';
 		$output .= '<input type="text" name="name" value="' . $row['Naam'] . '">';
 		$output .= '<input type="hidden" name="' . $type . '">';
@@ -190,6 +362,42 @@ class CMS {
 		return $output;
 	}
 
+	private function addItem() {
+		$output = '';
+		if (isset($_POST['itemAdd'])) {
+			$db = $GLOBALS['DB'];
+			$query = $db -> prepare('INSERT INTO `producten` (`Naam`, `Omschrijving`, `Prijs`, `Voorraad`, `parentid`)
+									 VALUES (?, ?, ?, ?, ?)');
+			$params = array($_POST['itemName'], $_POST['itemDescription'], $_POST['itemPrice'], $_POST['itemAmount'], $_GET['subcat']);
+			$query -> execute($params);
+			header('Location: index.php?content=item&action=list&subcat=' . $_GET['subcat']);
+			exit();
+		} else {
+			$output .= '<form method="post" id="addForm"><table>
+							<tr>
+								<td>Naam: </td>
+								<td><input type="text" name="itemName"></td>
+							</tr>
+							<tr>
+								<td>Omschrijving: </td>
+								<td><textarea name="itemDescription"></textarea></td>
+							</tr>
+							<tr>
+								<td>Prijs:</td>
+								<td><input type="text" data-symbol="€" name="itemPrice"></td>
+							</tr>
+							<tr>
+								<td>Voorraad:</td>
+								<td><input type="text" name="itemAmount"></td>
+							</tr>
+							<tr>
+								<td><input type="submit" name="itemAdd" value="Toevoegen" ></td>
+							</tr>';
+			$output .= '</table></form>';
+		}
+		return $output;
+	}
+
 	private function delete() {
 		$output = '';
 		if (isset($_GET['cat'])) {
@@ -206,6 +414,14 @@ class CMS {
 			$query -> execute(array($id));
 		}
 		return $output;
+	}
+
+	private function deleteItem() {
+		$db = $GLOBALS['DB'];
+		$query = $db -> prepare('DELETE FROM `producten` WHERE `id` = ?');
+		$query -> execute(array($_GET['item']));
+		header('Location: index.php?content=item&action=list&subcat=' . $_GET['parent']);
+		exit();
 	}
 
 }
