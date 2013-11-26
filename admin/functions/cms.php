@@ -237,10 +237,14 @@ class CMS {
 		return $output;
 	}
 
-	private function listItems() {
+	private function listOrders() {
 		$output = '';
 		$db = $GLOBALS['DB'];
 		$query = $db -> prepare('SELECT * FROM `bestellingen`');
+		$query -> execute();
+		while ($row = $query -> fetch(PDO::FETCH_ASSOC)) {
+			
+		}
 		return $output;
 	}
 
