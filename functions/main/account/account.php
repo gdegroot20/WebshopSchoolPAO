@@ -177,14 +177,14 @@ class Account {
 	}
 
 	public function showOrders() {
-		$output = "";
+		$output = "<div id='viewOrders'>";
 		$orders = $this -> getOrders();
 		foreach ($orders as $order) {
-			$output.="	<table id='tableviewOrders'>
+			$output.="	<table class='tableviewOrders'>
 							<TR>
 								<TD>BestelNummer : ".$order['id']." | Datum besteld : ".$order['BestelDag']."
 							</TR>
-							<table id='innerTableViewOrders'>
+							<table class='innerTableViewOrders'>
 								<TR>
 									<TD>Product</TD>
 									<TD>Hoeveelheid</td>
@@ -216,7 +216,7 @@ class Account {
 						</table>
 					</table>';
 		}
-
+		$output.='</div>';
 		return $output;
 		//var_dump($orders);
 	}
@@ -240,6 +240,58 @@ class Account {
 
 		return $fetch;
 	}
+	
+	public function confirmCheckout(){
+		if(isset($_SESSION['Items']) && !empty($_SESSION['Items'])){
+			foreach($_POST as $key => $value){
+				if(preg_match("/amount/", $key)){
+					if(ctype_digit($key) && ctype_digit($value)){
+						$key = explode("_", $key);
+						$item = $key[1];
+						$_SESSION["Items"][$item] = $value;
+					}
+				}
+			}
+			$cart = new shoppingcart();
+			$output=$cart -> showFinalOrder();
+		}
+		return $output;
+	}
+	
+	public function checkout(){	
+			$this->setOrder();
+			$output="Dank u voor uw bestelling!";
+			return $output;
+	}
+	
+	private function setOrder(){
+		$accountid =$this->id;
+		$cart = $_SESSION["Items"];
+		$items='';
+		$params=array();
+		foreach ($cart as $item => $amount) {
+			$items.=$item.",".$amount.";";
+			$param=array($amount,$item);
+			$params[]=$param;
+		}
+		$items = substr_replace($items ,"",-1);
+		$phpdate = time();
+		$dateOrder = date( 'Y-m-d', $phpdate );
+		
+		//$_SESSION['Items'] = "";
+		//unset($_SESSION["Items"]);
+		
+	
+		$db = $GLOBALS['DB'];
+		$query = $db -> prepare("INSERT INTO bestellingen (`accountid`,`producten`,`besteldag`) VALUES(?,?,?)");
+		$param = array($accountid,$items,$dateOrder);
+		$query -> execute($param);
+		foreach($params as $param){
+			$query = $db->prepare("UPDATE Producten SET Voorraad= Voorraad - ? WHERE id = ? ");
+			$query-> execute($param);
+		}
+	}
+
 
 }
 ?>

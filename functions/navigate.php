@@ -80,6 +80,7 @@ class navigate{
 		$output= "	
 						<li><a href='".$_SERVER["PHP_SELF"]."?content=customerPage&page=adjustInfo'>Gegevens wijzigen</a></li>
 						<li><a href='".$_SERVER["PHP_SELF"]."?content=customerPage&page=viewOrders'>Overzicht bestellingen</a></li>
+						<li><a href='".$_SERVER["PHP_SELF"]."'>Terug naar winkel.</a></li>
 				";
 		return $output;
 	}

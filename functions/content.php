@@ -19,6 +19,7 @@ class Content {
 		$output = '<div id="content">';
 
 		if (isset($_GET['content'])) {
+			$shoppingCart = new shoppingcart();
 			if ($_GET['content'] == 'register') {
 				$register = new Register();
 				$output .= $register -> load();
@@ -26,7 +27,26 @@ class Content {
 				$nav = new navigate();
 				if(isset($_GET['subCat'])){
 					$output .= $nav -> getProducts();
+					if(isset($_POST['inShoppingCart'])){
+						$shoppingCart->addItemToCart($_POST['inShoppingCart']);
+					}
 				}
+			}else if($_GET['content'] == 'confirmCheckout'){
+				if(isset($_SESSION['account'])){
+					$account= $_SESSION['account'];
+					$output.=$account->confirmCheckout();	
+				}else{
+					$output.="U moet eerst inloggen";
+				}
+			}else if($_GET['content'] == 'checkout'){
+				if(isset($_SESSION['account'])){
+					$account= $_SESSION['account'];
+					$output.=$account->checkout();	
+				}else{
+					$output.="U moet eerst inloggen";
+				}
+			}else if($_GET['content'] == 'shoppingcart'){
+				$output.=$shoppingCart->showCart();
 			}else if ($_GET['content'] == 'contact') {
 				$output.= contactForm();
 			} else if ($_GET['content'] == 'manage') {
@@ -35,9 +55,6 @@ class Content {
 			} else if ($_GET['content'] == 'customerPage') {
 				if (isset($_GET["page"])) {
 					$acc = $_SESSION['account'];
-					if ($_GET["page"] == "viewOrders") {
-						$output .= $acc -> showOrders();
-					}
 					if ($_GET["page"] == "adjustInfo") {
 						//($_POST);
 						if (isset($_POST['adjustAddressInfo'])) {
@@ -51,7 +68,7 @@ class Content {
 						$output .= $acc -> changePasswordForm();
 
 					} else if ($_GET["page"] == "viewOrders") {
-
+						$output .= $acc -> showOrders();
 					}
 				} else {
 					$output .= "Welkom hier kunt u account dingen doen";

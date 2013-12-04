@@ -20,6 +20,10 @@ class Header {
 						<a href="index.php?content=register">Registreer</a>
 						</td>';
 					} else {
+						$output .= '
+						<td>
+						<a href="index.php?content=customerPage">Account</a>
+						</td>';
 						$account = $_SESSION['account'];
 						if ($account -> hasRight('cms')) {
 							$output .= '
@@ -31,6 +35,9 @@ class Header {
 					$output .= '
 						<td>
 						<a href="index.php?content=contact">Contact</a>
+						</td>
+						<td>
+							<a href="index.php?content=shoppingcart" title="mijn winkelwagen"><img style="height:20px;"src="images/header/shoppingcart.png" /></a>
 						</td>
 					</tr>
 				</table>

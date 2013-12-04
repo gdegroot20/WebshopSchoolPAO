@@ -11,20 +11,48 @@ class shoppingcart {
 		
 	public function showCart(){
 		if(isset($_SESSION['Items']) && !empty($_SESSION['Items'])){
-			$content="<table>";
+			$content="<div id='shoppingcart'>
+			<form method='POST' action='".$_SERVER['PHP_SELF']."?content=confirmCheckout'><table >";
+			$content.="<TR><TD class='cartHeaderLeft' id='shoppingcartImgTD'></TD><TD class='cartHeader' id='shoppingcartNameTD'>Naam</TD><TD class='cartHeader' id='shoppingcartAmountTD'>hoeveelheid</TD><TD class='cartHeader' id='shoppingcartPriceTD'>prijs</TD><TD class='cartHeader' id=''>totaal</TD><TD class='cartHeaderRight'></TD></TR>";
 			$totaalprijs=0;
 			foreach($_SESSION['Items'] as $item => $amount){
 				$fetch=$this->getItem($item);
 				$prijs=$amount * $fetch['Prijs'];
 				$totaalprijs+=$prijs;
-				$content.="<TR><TD>".$fetch['Naam']."</TD><TD>".$amount."</TD><TD>€ ".$prijs.",00</TD></TR>";
+				$content.="<TR id='item".$fetch['id']."'><TD class='cartLeft'><img src='' /></TD><TD class='cart'>".$fetch['Naam']."</TD><TD class='cart'><input type='text' name='amount_".$fetch['id']."' class='itemAmount' value='".$amount."' /> </TD><TD class='cart'>€ <span class='itemPrice'>".$fetch['Prijs'].",00</span></TD><TD class='cart'>€ <span class='itemTotalPrice'>".$prijs.",00</span></TD><td class='cartRight'><a href='#' class='cartRemove' title='verwijder item'>X</a></td></TR>";
 			}
 
-			$content.="<TR><TD></TD><TD></TD><TD>€ $totaalprijs,00 </TD></TR></table>";
-			$content.="<TR><TD></TD><TD></TD><TD><form method='POST' action='".$_SERVER['PHP_SELF']."'><button name='checkOut'>afrekenen</button></TD></form></TR></table>";
-			
+			$content.="<TR><TD></TD><TD></TD><TD></TD><TD></TD><TD class='cartTotal'>€ <span id='shoppingcartTotalPrice'>$totaalprijs,00</TD></TR></table>";
+			$content.="<TR><TD></TD><TD></TD><TD><button name='checkOut'>afrekenen</button></TD></TR></table></form></div>";
+			$content.="<script>setEventsShoppingCart();</script>";
 			return $content;
+		}else{
+			return "Er zitten op het moment geen items in uw winkelmandje.";
 		}
+	}
+
+	public function showFinalOrder(){
+		
+		if(isset($_SESSION['Items']) && !empty($_SESSION['Items'])){
+			$content="<div id='shoppingcart'>
+			<form method='POST' action='".$_SERVER['PHP_SELF']."?content=checkout'><table >";
+			$content.="<TR><TD class='cartHeaderLeft' id='shoppingcartImgTD'></TD><TD class='cartHeader' id='shoppingcartNameTD'>Naam</TD><TD class='cartHeader' id='shoppingcartAmountTD'>hoeveelheid</TD><TD class='cartHeader' id='shoppingcartPriceTD'>prijs</TD><TD class='cartHeaderRight' id=''>totaal</TD></TR>";
+			$totaalprijs=0;
+			foreach($_SESSION['Items'] as $item => $amount){
+				$fetch=$this->getItem($item);
+				$prijs=$amount * $fetch['Prijs'];
+				$totaalprijs+=$prijs;
+				$content.="<TR id='item".$fetch['id']."'><TD class='cartLeft'><img src='' /></TD><TD class='cart'>".$fetch['Naam']."</TD><TD class='cart'>$amount</TD><TD class='cart'>€ <span class='itemPrice'>".$fetch['Prijs'].",00</span></TD><TD class='cartRight'>€ <span class='itemTotalPrice'>".$prijs.",00</span></TD>";
+			}
+
+			$content.="<TR><TD colspan='4'></TD><TD class='cartTotal'>€ <span id='shoppingcartTotalPrice'>$totaalprijs,00</TD></TR></table>";
+			$content.="<TR><TD colspan='2'></TD><TD><button name='checkOut'>bevestig</button></TD></TR></table></form></div>";
+			return $content;
+		}else{
+			header('location:index.php');
+			exit();
+		}
+			
 	}
 	
 	private function getItem($item){
@@ -53,7 +81,7 @@ class shoppingcart {
 		
 	private function checkItemInCart($item){
 		if(in_array($item, $_SESSION['Items'])){
-			$_SESSION['Items'][$item]+=1;
+			//$_SESSION['Items'][$item]+=1;
 			return true;
 		}
 		else{
@@ -76,10 +104,17 @@ class shoppingcart {
 			return false;
 		}
 	}
-	
+	/*
 	public function checkOut(){
-		
+		if(isset($_SESSION['account']) && !emtpy($_SESSION['account'])){
+			header("location:index.php?content=checkout");
+		}else{
+			$output="U moet eerst inloggen om te kunnen afrekenen.";
+		}
+		return $output;
 	}
+	 *
+	 */
 	
 }
 
