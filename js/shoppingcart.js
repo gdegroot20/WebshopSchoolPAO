@@ -49,11 +49,14 @@ function cartTotalAmount(){
 	var elements = document.getElementsByClassName("itemTotalPrice");
 		
 		var total = 0;
+		var items = 0;
 		for (var i = 0; i < elements.length;i++){
 			price=$(elements[i]).text();
 			total += parseInt(price);
+			items
 		}
 		$("#shoppingcartTotalPrice").text(total+",00");
+		$("#cartTotalAmountHeader").text(total+",00");
 }
 
 function removeFromCart(obj){
@@ -79,6 +82,11 @@ function removeFromCart(obj){
 	  }
 	xmlhttp.open("GET","procces/removeFromCart.php?id="+id,true);
 	xmlhttp.send();
+	
+	var element = $("#cartItemAmountHeader");
+	var amount =parseInt($(element).text());
+	amount -= 1; 
+	$(element).text(amount + ' Artikkelen')
 	
 	$(parent).remove();
 	cartTotalAmount();

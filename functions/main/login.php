@@ -15,7 +15,8 @@ class Login {
 	}
 
 	public function getLogin($forceHome) {
-		$output = '<form id="loginForm" ' . ($forceHome ? 'action="../index.php"' : '') . ' method="post">';
+		$output = '<form id="loginForm" ' . ($forceHome ? 'action="../index.php"' : '') . ' method="post">
+					<span>';
 
 		$output .= $this -> log;
 
@@ -26,6 +27,7 @@ class Login {
 			if ($account -> shouldLogout()) {
 				$this -> logout();
 				header('Location: /index.php');
+				exit;
 			} else {
 				$output .= appendTD($account -> getName());
 				$_POST['account'] = '';
@@ -34,12 +36,11 @@ class Login {
 				$account -> update();
 			}
 		}
-		return $output . '</form>';
+		return $output . '</span></form>';
 	}
 
 	private function getLoginForm() {
 		$output = '';
-
 		$output .= '
 				<td>
 					<input type="text" title="E-mail" name="loginEmail" placeholder="E-mail">
@@ -48,7 +49,7 @@ class Login {
 					<input type="password" title="Wachtwoord" name="loginPassword" placeholder="Wachtwoord">
 				</td>
 				<td>
-					<input type="submit" name="login" value="Login">
+					<button name="login" value="">Login</button>
 				</td>';
 
 		return $output;
@@ -59,7 +60,7 @@ class Login {
 
 		$output .= '
 				<td>
-					<input type="submit" name="logoff" value="Log uit">
+					<button name="logoff">Log uit</button>
 				</td>';
 
 		return $output;
@@ -85,12 +86,12 @@ class Login {
 			$account -> update();
 			$_SESSION['account'] = $account;
 			$_SESSION['loggedin'] = true;
-			$output .= appendTD('Succesvol ingelogd!');
+			$output .= appendTD('Succesvol ingelogd! ');
 		} else {
-			$output .= appendTD('Ongeldige login gegevens');
+			$output .= appendTD('Ongeldige login gegevens ');
 		}
 		if (!$rows) {
-			$output .= appendTD('Inloggen mislukt!');
+			$output .= appendTD('Inloggen mislukt! ');
 		}
 		return $output;
 	}

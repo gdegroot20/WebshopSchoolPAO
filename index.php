@@ -6,6 +6,7 @@ init('ini_files');
 session_start();
 
 $login = new Login();
+$cart = new shoppingcart();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,25 +26,35 @@ $login = new Login();
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script type="text/javascript" src="js/util.js"></script>
 		<script type="text/javascript" src="js/shoppingcart.js"></script>
+		
+		<?php if(!isset($_SESSION['loggedIn'])): ?>
+			<script type="text/javascript" src="js/login.js"></script>
+		<?php endif; ?>
 		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 	</head>
 
 	<body>
-		<?php
-		$header = new Header();
-		echo $header -> getHeader($login);
+		<div id="container">
+			<?php
+			$content = new Content();
+			$contentOutput= $content -> loadContent();
+			
+			$header = new Header();
+			$headerOutput=$header -> getHeader($login,$cart);
+	
+			echo $headerOutput;
+			echo $contentOutput;
 
-		$content = new Content();
-		echo $content -> loadContent();
-		echo isset($_SESSION) ? 'TRUE' : 'FALSE';
-		?>
-
-		<footer>
-			<p>
-				&copy; Gerrit de Groot en Timon de Groot
-			</p>
-		</footer>
+			//echo isset($_SESSION) ? 'TRUE' : 'FALSE';
+			?>
+	
+			<footer>
+				<p>
+					&copy; Gerrit de Groot en Timon de Groot
+				</p>
+			</footer>
+		</div>
 	</body>
 </html>

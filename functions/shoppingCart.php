@@ -78,7 +78,33 @@ class shoppingcart {
 			}
 		}
 	}	
+	
+	public function totalPriceCart(){
 		
+			$totalprice=0;
+			if(isset($_SESSION['Items'])){
+				foreach($_SESSION['Items'] as $item => $amount){
+					$fetch=$this->getItem($item);
+					$prijs=$amount * $fetch['Prijs'];
+					$totalprice+=$prijs;
+				}
+			}
+			return $totalprice;
+	}
+	
+	public function countItemsInCart(){
+		if(isset($_SESSION['Items'])){
+			$count = count($_SESSION['Items']);
+			if($count == 1){
+				return $count.' Artikel';
+			}else if($count > 1){
+				return $count.' Artikellen';
+			}
+		}
+			return 'Geen artikellen';
+		
+	}
+	
 	private function checkItemInCart($item){
 		if(in_array($item, $_SESSION['Items'])){
 			//$_SESSION['Items'][$item]+=1;

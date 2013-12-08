@@ -10,14 +10,16 @@ class Content {
 	public function loadContent() {
 		$output = '';
 		$menu = new Menu();
+		$output .= "<div id='contentWrapper'>";
 		$output .= $menu -> load();
 		$output .= $this -> load();
+		$output .= "<div class='clear'></div></div>";
 		return $output;
 	}
 
 	public function load() {
 		$output = '<div id="content">';
-
+		
 		if (isset($_GET['content'])) {
 			$shoppingCart = new shoppingcart();
 			if ($_GET['content'] == 'register') {
@@ -53,25 +55,31 @@ class Content {
 				header('Location: admin');
 				exit();
 			} else if ($_GET['content'] == 'customerPage') {
-				if (isset($_GET["page"])) {
-					$acc = $_SESSION['account'];
-					if ($_GET["page"] == "adjustInfo") {
-						//($_POST);
-						if (isset($_POST['adjustAddressInfo'])) {
-								$output .= $acc -> changeAddress($_POST["firstName"],$_POST["middleName"],$_POST["surName"],$_POST["streetName"],$_POST["homeNumber"],$_POST["zipCode"],$_POST["city"]);
-						} else if (isset($_POST['adjustPassword'])) {
-							if (!empty($_POST["passOld"]) && !empty($_POST["passNew"]) && !empty($_POST["passNewCheck"]))
-								$output .= $acc -> changePassword($_POST["passOld"], $_POST["passNew"], $_POST["passNewCheck"]);
+				if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true){
+					
+					if (isset($_GET["page"])) {
+						$acc = $_SESSION['account'];
+						if ($_GET["page"] == "adjustInfo") {
+							//($_POST);
+							if (isset($_POST['adjustAddressInfo'])) {
+									$output .= $acc -> changeAddress($_POST["firstName"],$_POST["middleName"],$_POST["surName"],$_POST["streetName"],$_POST["homeNumber"],$_POST["zipCode"],$_POST["city"]);
+							} else if (isset($_POST['adjustPassword'])) {
+								if (!empty($_POST["passOld"]) && !empty($_POST["passNew"]) && !empty($_POST["passNewCheck"]))
+									$output .= $acc -> changePassword($_POST["passOld"], $_POST["passNew"], $_POST["passNewCheck"]);
+							}
+	
+							$output .= $acc -> changeAddressForm();
+							$output .= $acc -> changePasswordForm();
+	
+						} else if ($_GET["page"] == "viewOrders") {
+							$output .= $acc -> showOrders();
 						}
-
-						$output .= $acc -> changeAddressForm();
-						$output .= $acc -> changePasswordForm();
-
-					} else if ($_GET["page"] == "viewOrders") {
-						$output .= $acc -> showOrders();
+					} else {
+						$output .= "Welkom hier kunt u account dingen doen";
 					}
-				} else {
-					$output .= "Welkom hier kunt u account dingen doen";
+				}else{
+					header("location:index.php");
+					exit;
 				}
 			}
 		} else {

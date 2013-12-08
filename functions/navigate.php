@@ -13,10 +13,8 @@ class navigate{
 		$stmt->execute();
 		while($fetch=$stmt->fetch()){
 			if(isset($_GET['cat']) && $_GET['cat'] == $fetch['id']){
-				$content.="<li><a href='".$_SERVER['PHP_SELF']."?content=nav&cat=".$fetch['id']."'>".$fetch['Naam']."</a><ul>";
+				$content.="<li><a href='".$_SERVER['PHP_SELF']."?content=nav&cat=".$fetch['id']."'>".$fetch['Naam']."</a></li>";
 				$content.=$this->getSubCat();
-				$content.="</ul></li>";
-				//echo "oke0";
 				
 			}else{
 				$content.="<li><a href='".$_SERVER['PHP_SELF']."?content=nav&cat=".$fetch['id']."'>".$fetch['Naam']."</a></li>";
@@ -33,7 +31,7 @@ class navigate{
 		$param=array($_GET['cat']);
 		$stmt->execute($param);
 		while($fetch=$stmt->fetch()){
-				$content.="<li><a href='".$_SERVER['PHP_SELF']."?content=nav&cat=".$_GET['cat']."&subCat=".$fetch['id']."'>".$fetch['Naam']."</a></li>";
+				$content.="<li class='subItem'><a href='".$_SERVER['PHP_SELF']."?content=nav&cat=".$_GET['cat']."&subCat=".$fetch['id']."'>".$fetch['Naam']."</a></li>";
 		}
 		
 		return $content;
@@ -48,9 +46,17 @@ class navigate{
 		
 		while($fetch=$stmt->fetch()){
 			
+			if($fetch['Voorraad'] > 1){
+				$indicator='images/icons/bullet_green.png';
+				$title='Op voorraad';
+			}else{
+				$indicator='images/icons/bullet_red.png';
+				$title='Niet op voorraad';
+			}
+			
 			$content.=	'<TR>
-							<td class="item_image"  rowspan="2"><img src="" /></td>
-							<td class="item_name" colspan="2"><b>'.$fetch['Naam'].'</b></td>
+							<td class="item_image"  rowspan="2"><img src="images/Items/noImageAvailable.jpg" /></td>
+							<td class="item_name" colspan="2"><h2>'.$fetch['Naam'].'</h2></td>
 						</TR>
 						<TR>
 							<td class="item_description" colspan="2">'.$fetch['Omschrijving'].'</td>
@@ -59,11 +65,11 @@ class navigate{
 										<td>Nu voor:</td>
 									</tr>
 									<tr>
-										<td>€ '.$fetch['Prijs'].',</td>
-										<td>00</td>
+										<td>€ '.$fetch['Prijs'].',00</td>
+										<td><img src="'.$indicator.'" title="'.$title.'"/></td>
 									</tr>
 									<tr>
-										<td><button name="inShoppingCart" value="'.$fetch['id'].'">in Winkelwagen</button></td>
+										<td><button name="inShoppingCart" value="'.$fetch['id'].'">Toevoegen</button></td>
 									</tr>
 								</table>
 							</td>
