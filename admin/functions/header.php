@@ -16,9 +16,11 @@ class AdminHeader {
 					$output .= $login -> getLogin(true);
 					$output .= '
 						<td>
-						<a href="../">Terug naar de homepage</a>
-						</td>
-					</tr>
+						| <a href="../">Terug naar de homepage</a> |
+						</td>'. (isset($_SERVER['HTTP_REFERER']) ? '<td>
+							<a href="'.$_SERVER['HTTP_REFERER'].'">Vorige</a> |
+						</td>' : '').
+					'</tr>
 				</table>
 			</nav>
 		</header>

@@ -69,6 +69,21 @@ header {
 	margin-bottom: 15px;
 }
 
+.order {
+	background-color: #5B6A70;
+	margin-top:15px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 250px;
+	text-align: left;
+	border: solid black 1px;
+	border-radius: 6px;
+}
+
+.order:last-child {
+	margin-bottom: 15px;
+}
+
 .title {
 	font-size: 20px;
 }

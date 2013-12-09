@@ -64,7 +64,7 @@ class CMS {
 			} else if ($_GET['content'] == 'order') {
 				if (isset($_GET['action'])) {
 					switch ($_GET['action']) {
-						case 'list':
+						default :
 							$output .= $this -> listOrders();
 							break;
 					}
@@ -230,20 +230,63 @@ class CMS {
 		if ($i == 0) {
 			$itemHeader = '<center><h2>Geen producten gevonden</h2></center>';
 		}
-		
+
 		$output .= $itemHeader;
 		$output .= $itemList;
-		
+
 		return $output;
 	}
 
 	private function listOrders() {
 		$output = '';
 		$db = $GLOBALS['DB'];
+
+		if (isset($_POST['orderUpdate'])) {
+			$query = $db -> prepare('UPDATE `bestellingen` SET `Status` = ? WHERE `id` = ?');
+			$query -> execute(array($_POST['orderStatus'], $_POST['orderID']));
+		}
+
 		$query = $db -> prepare('SELECT * FROM `bestellingen`');
 		$query -> execute();
 		while ($row = $query -> fetch(PDO::FETCH_ASSOC)) {
-			
+			$output .= '<div class="order"><table>';
+			$continue = false;
+			foreach ($row as $key => $value) {
+				switch ($key) {
+					case 'id' :
+						$key = 'Bestelling ID';
+						break;
+					case 'accountid' :
+						$key = 'Account ID';
+						break;
+					case 'Status' :
+						$continue = true;
+						break;
+					case 'Bedrag' :
+						$value = money_format('%i', $value);
+						break;
+				}
+				if ($continue) continue;
+				
+				$output .= '<tr><td><strong>' . $key . ':</strong></td><td>' . $value . '</td></tr>';
+			}
+			$status = $row['Status'];
+			$statusArray = array('Verzonden', 'In behandeling');
+			$output .= '<tr><td><strong>Status: </strong></td>
+							<td>
+								<form method="post">
+								<input type="hidden" name="orderID" value="' . $row['id'] . '" />
+								<select name="orderStatus">';
+
+			for ($i = 0; $i < count($statusArray); $i++)
+				$output .= '<option ' . ($statusArray[$i] == $status ? 'selected' : '') . '>' . $statusArray[$i] . '</option>';
+
+			$output .= '</select>
+						<input type="submit" name="orderUpdate" value="Bijwerken" />
+						</form>
+					</td>
+				</tr>
+			</table></div>';
 		}
 		return $output;
 	}
