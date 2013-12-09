@@ -24,7 +24,11 @@ class Content {
 			$shoppingCart = new shoppingcart();
 			if ($_GET['content'] == 'register') {
 				$register = new Register();
-				$output .= $register -> load();
+				if(isset($_POST['register'])){
+					$output.= $register -> checkRegister($_POST);
+				}else{
+					$output .= $register -> load();
+				}
 			} else if ($_GET['content'] == 'nav') {
 				$nav = new navigate();
 				if(isset($_GET['subCat'])){
