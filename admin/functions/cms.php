@@ -83,9 +83,6 @@ class CMS {
 					<li>
 						<a href="index.php?content=order">Bestellingen</a>
 					</li>
-					<li>
-						<a>Klanten</a>
-					</li>
 				</ul>
 			</nav>
 		';
@@ -218,6 +215,9 @@ class CMS {
 							<td><a><strong>Omschrijving:</strong> ' . $row['Omschrijving'] . '</a></td>
 						</tr>';
 			$itemList .= '<tr>
+							<td><a><strong>Afbeelding:</strong></td><td> <a href="../images/Items/item' . $row['id'] . '.jpg"' . '<img src="../images/preview/item' . $row['id'] . '.jpg" /></a></td>
+						</tr>';
+			$itemList .= '<tr>
 							<td><a href="index.php?content=item&action=delete&item=' . $row['id'] . '&parent=' . $id . '" onclick="return checkDelete(\'' . $row['Naam'] . '\')"><img class="delete2" src="images/delete.png"></a></td>
 							<td><a><strong>Prijs:</strong> €' . $row['Prijs'] . '</a></td></tr>';
 			$itemList .= '<tr>
@@ -266,8 +266,9 @@ class CMS {
 						$value = money_format('%i', $value);
 						break;
 				}
-				if ($continue) continue;
-				
+				if ($continue)
+					continue;
+
 				$output .= '<tr><td><strong>' . $key . ':</strong></td><td>' . $value . '</td></tr>';
 			}
 			$status = $row['Status'];
@@ -417,10 +418,38 @@ class CMS {
 									 VALUES (?, ?, ?, ?, ?)');
 			$params = array($_POST['itemName'], $_POST['itemDescription'], $_POST['itemPrice'], $_POST['itemAmount'], $_GET['subcat']);
 			$query -> execute($params);
-			header('Location: index.php?content=item&action=list&subcat=' . $_GET['subcat']);
+			$allowedExts = array("gif", "jpeg", "jpg", "png");
+			$temp = explode(".", $_FILES["image"]["name"]);
+			$extension = end($temp);
+			$query = $db -> prepare('SELECT * FROM `producten` ORDER BY `id` DESC');
+			$query -> execute(array());
+			$fetch = $query -> fetch(PDO::FETCH_ASSOC);
+			$imageName = 'item' . $fetch['id'];
+			if ((($_FILES["image"]["type"] == "image/gif") || ($_FILES["image"]["type"] == "image/jpeg") || ($_FILES["image"]["type"] == "image/jpg") || ($_FILES["image"]["type"] == "image/pjpeg") || ($_FILES["image"]["type"] == "image/x-png") || ($_FILES["image"]["type"] == "image/png")) && ($_FILES["image"]["size"] < 2000000) && in_array($extension, $allowedExts)) {
+				if ($_FILES["image"]["error"] > 0) {
+					echo "Error: " . $_FILES["image"]["error"] . "<br>";
+				} else {
+					echo "Upload: " . $_FILES["image"]["name"] . "<br>";
+					echo "Type: " . $_FILES["image"]["type"] . "<br>";
+					echo "Size: " . ($_FILES["image"]["size"] / 1024) . " kB <br>";
+					if (file_exists("../images/Items/" . $imageName)) {
+						echo $_FILES["image"]["name"] . " already exists. ";
+					} else {
+						$image = new Image();
+						$image -> load($_FILES['image']['tmp_name']);
+						$image -> resize(70, 128);
+						$image -> save('../images/preview/' . $imageName . '.jpg');
+						move_uploaded_file($_FILES["image"]["tmp_name"], "../images/Items/" . $imageName . '.jpg');
+						echo "Stored in: " . "images/" . strtolower($imageName) . '.' . $extension;
+					}
+				}
+			} else {
+				echo "Invalid file";
+			}
+			//header('Location: index.php?content=item&action=list&subcat=' . $_GET['subcat']);
 			exit();
 		} else {
-			$output .= '<form method="post" id="addForm"><table>
+			$output .= '<form method="post" id="addForm" enctype="multipart/form-data"><table>
 							<tr>
 								<td>Naam: </td>
 								<td><input type="text" name="itemName"></td>
@@ -429,6 +458,10 @@ class CMS {
 								<td>Omschrijving: </td>
 								<td><textarea name="itemDescription"></textarea></td>
 							</tr>
+							<tr>
+								<td>Afbeelding: </td>
+								<td><input type="file" name="image" id="file"></td>
+							</tr>						
 							<tr>
 								<td>Prijs:</td>
 								<td><input type="text" data-symbol="€" name="itemPrice"></td>
