@@ -29,7 +29,7 @@ class Header {
 					</div>
 				</div>
 				<div id='headerBot'>
-					<h1>Zwart's Schoenen</h1>
+					<a href='../WebshopSchoolPAO'><h1>Zwart's Schoenen</h1></a>
 					<div id='shoppingCart'>
 						<div><span id='cartItemAmountHeader'>$itemAmount</span> | € <span id='cartTotalAmountHeader'>$totalprice,00</span></div>
 						<a href='index.php?content=shoppingcart'><img src='images/header/shoppingcart.png' title='Mijn winkelwagen' /></a>

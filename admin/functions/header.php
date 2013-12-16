@@ -20,10 +20,7 @@ class AdminHeader {
 						</td>
 						<td>
 						| <a href="../">Terug naar de homepage</a> |
-						</td>'. (isset($_SERVER['HTTP_REFERER']) ? '<td>
-							<a href="'.$_SERVER['HTTP_REFERER'].'">Vorige</a> |
-						</td>' : '').
-					'</tr>
+					</tr>
 				</table>
 			</nav>
 		</header>

@@ -58,28 +58,28 @@ class Account {
 		$output = '	<form action="#" method="POST">
 						<table>
 							<TR>
-								<TD><input type="text" name="firstName" value="' . $this -> address -> getVoornaam() . '" /></TD>
+								<TD>Voornaam:</TD><TD><input type="text" name="firstName" value="' . $this -> address -> getVoornaam() . '" /></TD>
 							</TR>
 							<TR>
-								<TD><input type="text" name="middleName" value="' . $this -> address -> getTussenvoegsel() . '" /></TD>
+								<TD>Tussenvoegsel:</TD><TD><input type="text" name="middleName" value="' . $this -> address -> getTussenvoegsel() . '" /></TD>
 							</TR>
 							<TR>
-								<TD><input type="text" name="surName" value="' . $this -> address -> getAchternaam() . '" /></TD>
+								<TD>Achternaam:</TD><TD><input type="text" name="surName" value="' . $this -> address -> getAchternaam() . '" /></TD>
 							</TR>
 							<TR>
-								<TD><input type="text" name="streetName" value="' . $this -> address -> getStraatnaam() . '" /></TD>
+								<TD>Straatnaam:</TD><TD><input type="text" name="streetName" value="' . $this -> address -> getStraatnaam() . '" /></TD>
 							</TR>
 							<TR>
-								<TD><input type="text" name="homeNumber" value="' . $this -> address -> getHuisnummer() . '" /></TD>
+								<TD>Huisnummer::</TD><TD><input type="text" name="homeNumber" value="' . $this -> address -> getHuisnummer() . '" /></TD>
 							</TR>
 							<TR>
-								<TD><input type="text" name="zipCode" value="' . $this -> address -> getPostcode() . '" /></TD>
+								<TD>Postcode:</TD><TD><input type="text" name="zipCode" value="' . $this -> address -> getPostcode() . '" /></TD>
 							</TR>
 							<TR>
-								<TD><input type="text" name="city" value="' . $this -> address -> getPlaats() . '" /></TD>
+								<TD>Plaats:</TD><TD><input type="text" name="city" value="' . $this -> address -> getPlaats() . '" /></TD>
 							</TR>
 							<TR>
-								<TD><input type="submit" name="adjustAddressInfo" value="wijzigen"></TD>
+								<TD colspan="2"><input type="submit" name="adjustAddressInfo" value="Wijzigen" style="width:150px"></TD>
 							</TR>
 						</table>
 					</form>';
@@ -123,17 +123,18 @@ class Account {
 	public function changePasswordForm() {
 		$output = '	<form action="' . $_SERVER["PHP_SELF"] . '?content=customerPage&page=adjustInfo" method="POST">
 						<table>
+							<TR><TD>&nbsp;</TD></TR>
 							<TR>
-								<TD><input type="password" placeholder="oud wachtwoord" name="passOld"/></TD>
+								<TD><input type="password" placeholder="Oud wachtwoord" name="passOld"/></TD>
 							</TR>
 							<TR>
-								<TD><input type="password" placeholder="nieuw wachtwoord" name="passNew"/></TD>
+								<TD><input type="password" placeholder="Nieuw wachtwoord" name="passNew"/></TD>
 							</TR>
 							<TR>
-								<TD><input type="password" placeholder="herhaal wachtwoord" name="passNewCheck"/></TD>
+								<TD><input type="password" placeholder="Herhaal wachtwoord" name="passNewCheck"/></TD>
 							</TR>
 							<TR>
-								<TD><input type="submit" name="adjustPassword" value="wijzigen"></TD>
+								<TD colspan="2"><input type="submit" name="adjustPassword" value="Wijzigen" style="width: 150px"></TD>
 							</TR>
 						</table>
 					</form>
@@ -200,7 +201,7 @@ class Account {
 				$prijs = $item["Prijs"] * $amount;
 				$totaalprijs += $prijs;
 				$output .= "	<TR>
-								<TD><img src='#'/><a href='#'> " . $item["Naam"] . "</a></TD>
+								<TD><img src='images/preview/item".$item[0].".jpg'><a href='#'> " . $item["Naam"] . "</a></TD>
 								<TD>" . $amount . "</TD>
 								<TD>€ " . $item["Prijs"] . "</TD>
 								<TD>€ " . $prijs . "</TD>
@@ -222,7 +223,7 @@ class Account {
 
 	private function getOrders() {
 		$db = $GLOBALS['DB'];
-		$query = $db -> prepare('SELECT * FROM bestellingen WHERE accountid = ?');
+		$query = $db -> prepare('SELECT * FROM bestellingen WHERE accountid = ? ORDER BY `BestelDag` DESC');
 		$param = array($this -> id);
 		$query -> execute($param);
 		$orders = $query -> fetchAll(PDO::FETCH_ASSOC);
