@@ -16,6 +16,9 @@ class AdminHeader {
 					$output .= $login -> getLogin(true);
 					$output .= '
 						<td>
+							<a href="../admin/">Home CMS</a>
+						</td>
+						<td>
 						| <a href="../">Terug naar de homepage</a> |
 						</td>'. (isset($_SERVER['HTTP_REFERER']) ? '<td>
 							<a href="'.$_SERVER['HTTP_REFERER'].'">Vorige</a> |

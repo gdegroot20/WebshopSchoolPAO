@@ -215,9 +215,6 @@ class CMS {
 							<td><a><strong>Omschrijving:</strong> ' . $row['Omschrijving'] . '</a></td>
 						</tr>';
 			$itemList .= '<tr>
-							<td><a><strong>Afbeelding:</strong></td><td> <a href="../images/Items/item' . $row['id'] . '.jpg"' . '<img src="../images/preview/item' . $row['id'] . '.jpg" /></a></td>
-						</tr>';
-			$itemList .= '<tr>
 							<td><a href="index.php?content=item&action=delete&item=' . $row['id'] . '&parent=' . $id . '" onclick="return checkDelete(\'' . $row['Naam'] . '\')"><img class="delete2" src="images/delete.png"></a></td>
 							<td><a><strong>Prijs:</strong> €' . $row['Prijs'] . '</a></td></tr>';
 			$itemList .= '<tr>
@@ -435,9 +432,15 @@ class CMS {
 					if (file_exists("../images/Items/" . $imageName)) {
 						echo $_FILES["image"]["name"] . " already exists. ";
 					} else {
+						if (file_exists('../images/preview/')) {
+							if (!is_dir('../images/preview/'))
+								mkdir('../images/preview/', 0777);
+						} else {
+							mkdir('../images/preview/', 0777);
+						}
 						$image = new Image();
 						$image -> load($_FILES['image']['tmp_name']);
-						$image -> resize(70, 128);
+						$image -> resize(100, 100);
 						$image -> save('../images/preview/' . $imageName . '.jpg');
 						move_uploaded_file($_FILES["image"]["tmp_name"], "../images/Items/" . $imageName . '.jpg');
 						echo "Stored in: " . "images/" . strtolower($imageName) . '.' . $extension;
