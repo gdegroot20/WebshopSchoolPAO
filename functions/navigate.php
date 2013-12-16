@@ -54,8 +54,11 @@ class navigate{
 				$title='Niet op voorraad';
 			}
 			
+			
+			$image = searchImage($fetch['id']);
+			
 			$content.=	'<TR>
-							<td class="item_image"  rowspan="2"><img src="images/Items/noImageAvailable.jpg" /></td>
+							<td class="item_image"  rowspan="2"><img src="'.$image.'" /></td>
 							<td class="item_name" colspan="2"><h2>'.$fetch['Naam'].'</h2></td>
 						</TR>
 						<TR>

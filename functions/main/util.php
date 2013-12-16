@@ -1,5 +1,15 @@
 <?php
-
+function searchImage($id){
+	$image="";
+	foreach(glob("images/Items/item".$id.".*") as $value){
+		$image = $value;
+	}
+	if(!is_file($image)){
+		$image = "images/Items/noImageAvailable.jpg";
+	}
+	
+	return $image;
+}
 function clean($var) {
 	$var = htmlspecialchars($var);
 	//$var = mysql_real_escape_string($var);

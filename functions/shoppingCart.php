@@ -19,7 +19,10 @@ class shoppingcart {
 				$fetch=$this->getItem($item);
 				$prijs=$amount * $fetch['Prijs'];
 				$totaalprijs+=$prijs;
-				$content.="<TR id='item".$fetch['id']."'><TD class='cartLeft'><img src='' /></TD><TD class='cart'>".$fetch['Naam']."</TD><TD class='cart'><input type='text' name='amount_".$fetch['id']."' class='itemAmount' value='".$amount."' /> </TD><TD class='cart'>€ <span class='itemPrice'>".$fetch['Prijs'].",00</span></TD><TD class='cart'>€ <span class='itemTotalPrice'>".$prijs.",00</span></TD><td class='cartRight'><a href='#' class='cartRemove' title='verwijder item'>X</a></td></TR>";
+				$image = searchImage($fetch['id']);
+				
+				
+				$content.="<TR id='item".$fetch['id']."'><TD class='cartLeft'><img src='$image' /></TD><TD class='cart'>".$fetch['Naam']."</TD><TD class='cart'><input type='text' name='amount_".$fetch['id']."' class='itemAmount' value='".$amount."' /> </TD><TD class='cart'>€ <span class='itemPrice'>".$fetch['Prijs'].",00</span></TD><TD class='cart'>€ <span class='itemTotalPrice'>".$prijs.",00</span></TD><td class='cartRight'><a href='#' class='cartRemove' title='verwijder item'>X</a></td></TR>";
 			}
 
 			$content.="<TR><TD></TD><TD></TD><TD></TD><TD></TD><TD class='cartTotal'>€ <span id='shoppingcartTotalPrice'>$totaalprijs,00</TD></TR></table>";
@@ -42,7 +45,10 @@ class shoppingcart {
 				$fetch=$this->getItem($item);
 				$prijs=$amount * $fetch['Prijs'];
 				$totaalprijs+=$prijs;
-				$content.="<TR id='item".$fetch['id']."'><TD class='cartLeft'><img src='' /></TD><TD class='cart'>".$fetch['Naam']."</TD><TD class='cart'>$amount</TD><TD class='cart'>€ <span class='itemPrice'>".$fetch['Prijs'].",00</span></TD><TD class='cartRight'>€ <span class='itemTotalPrice'>".$prijs.",00</span></TD>";
+				
+				$image = searchImage($fetch['id']);
+				
+				$content.="<TR id='item".$fetch['id']."'><TD class='cartLeft'><img src='$image' /></TD><TD class='cart'>".$fetch['Naam']."</TD><TD class='cart'>$amount</TD><TD class='cart'>€ <span class='itemPrice'>".$fetch['Prijs'].",00</span></TD><TD class='cartRight'>€ <span class='itemTotalPrice'>".$prijs.",00</span></TD>";
 			}
 
 			$content.="<TR><TD colspan='4'></TD><TD class='cartTotal'>€ <span id='shoppingcartTotalPrice'>$totaalprijs,00</TD></TR></table>";
